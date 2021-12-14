@@ -1,33 +1,64 @@
-from .piece_base import PieceBase
 from .consts import BLACK_PIECES, WHITE_PIECES
+from .piece_base import PieceBase
 
 
 class BlackPawn(PieceBase):
     def __init__(self, position: list[int, int]):
-        super(BlackPawn, self).__init__("♟", position)
+        self.first = True
+        super(BlackPawn, self).__init__("♟", position, False)
 
     def check(self, x, y, gm):
-        if y - self.position[1] == 1:
-            if gm[x][y] != ' ' and gm[x][y].symbol in WHITE_PIECES:
+        stage_1 = self.check_stage_1(x, y, gm)
+        if not stage_1:
+            return False
+        return self.check_stage_2(x, y, gm)
+
+    def check_stage_1(self, x, y, gm):
+        if y - self.position[1] == 1 or (y - self.position[1] == 2 and self.first):
+            if gm[y][x] != ' ' and gm[y][x].symbol in WHITE_PIECES:
+                if x == self.position[0]:
+                    return False
                 return True
 
             if x == self.position[0]:
                 return True
 
         return False
+
+    def check_stage_2(self, x, y, gm):
+        if x == self.position[0]:
+            for y_new in range(self.position[1] + 1, y):
+                if gm[y_new][x] != ' ':
+                    return False
+        return True
 
 
 class WhitePawn(PieceBase):
     def __init__(self, position: list[int, int]):
-        super(WhitePawn, self).__init__("♙", position)
+        self.first = True
+        super(WhitePawn, self).__init__("♙", position, False)
 
     def check(self, x, y, gm):
-        print(x, y, self.position)
-        if y - self.position[1] == 1:
+        stage_1 = self.check_stage_1(x, y, gm)
+        if not stage_1:
+            return False
+        return self.check_stage_2(x, y, gm)
+
+    def check_stage_1(self, x, y, gm):
+        if y - self.position[1] == -1 or (y - self.position[1] == -2 and self.first):
             if gm[y][x] != ' ' and gm[y][x].symbol in BLACK_PIECES:
+                if x == self.position[0]:
+                    return False
                 return True
 
             if x == self.position[0]:
                 return True
 
         return False
+
+    def check_stage_2(self, x, y, gm):
+        if x == self.position[0]:
+            for y_new in range(self.position[1] - 1, y - 1, -1):
+                if gm[y_new][x] != ' ':
+                    return False
+        return True

@@ -1,4 +1,5 @@
 import re
+import time
 
 from asciimatics.event import KeyboardEvent
 from asciimatics.widgets import Frame, Layout, Label, Text, PopUpDialog
@@ -13,6 +14,8 @@ class GameScreen(Frame):
 
         self.layout = Layout([1, 1])
 
+        self.time = time.time()
+        # self.time = int(time.time())
         self.add_layout(self.layout)
         self.matrix = Label("", 20, name="GameMatrix", align="^")
         self.layout.add_widget(Label("Black", 1, "^"), 0)
@@ -20,6 +23,10 @@ class GameScreen(Frame):
         self.layout.add_widget(Label("White", 1, "^"), 0)
         self.move_text = Text(">", name="move", validator=self.__check, max_length=5)
         self.layout.add_widget(self.move_text, 1)
+        self.time_label = Label("", 1)
+        self.layout.add_widget(self.time_label, 1)
+        self.history = Label('- ', 8)
+        self.layout.add_widget(self.history, 1)
         self.fix()
 
     def __check(self, value: str):
@@ -34,15 +41,16 @@ class GameScreen(Frame):
         return True
 
     def __make_move(self):
-        chess_xy, move_xy = self.move_text.value.split()
-        chess_x, chess_y = ord(chess_xy[0]) - 65, int(chess_xy[1]) - 1
-        move_x, move_y = ord(move_xy[0]) - 65, int(move_xy[1]) - 1
+        chess_xy, move_xy = self.move_text.value.upper().split()
+        chess_x, chess_y = ord(chess_xy[0]) - 65, 8 - int(chess_xy[1])
+        move_x, move_y = ord(move_xy[0]) - 65, 8 - int(move_xy[1])
 
+        # print(chess_x, chess_y)
         if self.game[chess_y][chess_x] != ' ':
             # self.game[chess_x][chess_y], self.game[move_x][move_y] = self.game[move_x][move_y], self.game[chess_x][
             #     chess_y]
             if self.game.move(chess_x, chess_y, move_x, move_y):
-                pass
+                self.time_value = time.time()
             self.move_text.value = ""
 
     def process_event(self, event):
@@ -54,4 +62,5 @@ class GameScreen(Frame):
 
     def update(self, frame_no):
         self.matrix.text = str(self.game)
+        self.time_label.text = str(int(time.time() - self.time))
         super(GameScreen, self).update(frame_no)
