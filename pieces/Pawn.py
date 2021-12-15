@@ -14,7 +14,7 @@ class BlackPawn(PieceBase):
         return self.check_stage_2(x, y, gm)
 
     def check_stage_1(self, x, y, gm):
-        if y - self.position[1] == 1 or (y - self.position[1] == 2 and self.first):
+        if y - self.position[1] == 1 or (y - self.position[1] == 2 and not self.moves):
             if gm[y][x] != ' ' and gm[y][x].symbol in WHITE_PIECES:
                 if x == self.position[0]:
                     return False
@@ -36,7 +36,7 @@ class BlackPawn(PieceBase):
 class WhitePawn(PieceBase):
     def __init__(self, position: list[int, int]):
         self.first = True
-        super(WhitePawn, self).__init__("♙", position, False)
+        super(WhitePawn, self).__init__("♙", position, True)
 
     def check(self, x, y, gm):
         stage_1 = self.check_stage_1(x, y, gm)
@@ -45,7 +45,7 @@ class WhitePawn(PieceBase):
         return self.check_stage_2(x, y, gm)
 
     def check_stage_1(self, x, y, gm):
-        if y - self.position[1] == -1 or (y - self.position[1] == -2 and self.first):
+        if y - self.position[1] == -1 or (y - self.position[1] == -2 and not self.moves):
             if gm[y][x] != ' ' and gm[y][x].symbol in BLACK_PIECES:
                 if x == self.position[0]:
                     return False

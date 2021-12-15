@@ -1,4 +1,5 @@
 from pieces import *
+from collections import deque
 
 
 class GameBoard:
@@ -22,6 +23,7 @@ class GameBoard:
              King.WhiteKing([4, 7]),
              Bishop.WhiteBishop([5, 7]), Knight.WhiteKnight([6, 7]), Rook.WhiteRook([7, 7])])
         self.is_white_turn = True
+        self.history = deque()
 
     def __repr__(self):
         unpacked = [item for sublist in self.board for item in sublist]
@@ -45,13 +47,19 @@ class GameBoard:
   └───┴───┴───┴───┴───┴───┴───┴───┘
  A   B   C   D   E   F   G   H""" % tuple(unpacked)
 
-    def move(self, chess_x, chess_y, move_x, move_y):
-        # print(type(self.board[chess_y][chess_x]))
-        # print(self.board[chess_y][chess_x].check.__code__.co_varnames)
-        if self.board[chess_y][chess_x].check(move_x, move_y, self.board):
-            self.board[chess_y][chess_x].move(move_x, move_y)
-            if self.board[move_y][move_x] != " ":
-                self.board[move_y][move_x] = self.board[chess_y][chess_x]
+    def move(self, chess_xy: str, move_xy: str, time: float):
+        chess_x, chess_y = ord(chess_xy[0]) - 65, 8 - int(chess_xy[1])
+        move_x, move_y = ord(move_xy[0]) - 65, 8 - int(move_xy[1])
+        figure = self.board[chess_y][chess_x]
+        if figure != " " and figure.check(move_x, move_y, self.board) and figure.is_white == self.is_white_turn:
+
+            figure.move(move_x, move_y)
+            self.is_white_turn = not self.is_white_turn
+
+            self.history.appendleft(f"- {chess_xy}⇨ {move_xy} ({int(time)} s)")
+
+            if figure != " ":
+                self.board[move_y][move_x] = figure
                 self.board[chess_y][chess_x] = " "
                 return True
             self.board[chess_y][chess_x], self.board[move_y][move_x] = self.board[move_y][move_x], self.board[chess_y][

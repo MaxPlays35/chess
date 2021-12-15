@@ -1,8 +1,8 @@
 class PieceBase:
-    def __init__(self, symbol: str, position: list[int, int], is_white: bool):
+    def __init__(self, symbol: str, position: list[int, int], is_white: bool = False):
         self.symbol = symbol
         self.position = position
-        self.first = True
+        self.moves = 0
         self.is_white = is_white
 
     def check(self, x, y, gm):
@@ -10,7 +10,7 @@ class PieceBase:
 
     def move(self, x, y):
         self.position = [x, y]
-        self.first = False
+        self.moves += 1
 
     def __repr__(self):
         return self.symbol
