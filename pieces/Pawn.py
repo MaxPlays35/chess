@@ -33,6 +33,7 @@ class BlackPawn(PieceBase):
         return True
 
 
+
 class WhitePawn(PieceBase):
     def __init__(self, position: list[int, int]):
         self.first = True

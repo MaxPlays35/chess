@@ -13,7 +13,7 @@ class RookBase(PieceBase):
         return self.check_stage_2(x, y, gm)
 
     def check_stage_1(self, x, y):
-        if x == self.position[0] or y == self.position[0]:
+        if x == self.position[0] or y == self.position[1]:
             return True
         return False
 
@@ -41,6 +41,11 @@ class RookBase(PieceBase):
                 if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (WHITE_PIECES if not self.is_white else BLACK_PIECES):
                     saw_chess_before = True
             return True
+
+    def compute_legal_moves(self, gm):
+        legal_moves = [self.compute_linear_moves(1, 0, gm), self.compute_linear_moves(-1, 0, gm),
+                       self.compute_linear_moves(0, 1, gm), self.compute_linear_moves(0, -1, gm)]
+        return legal_moves
 
 
 class BlackRook(RookBase):
