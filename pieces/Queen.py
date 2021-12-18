@@ -4,6 +4,7 @@ from .piece_base import PieceBase
 
 class QueenBase(PieceBase):
     def __init__(self, symbol, position: list[int, int], is_white):
+        self.score = 9
         super(QueenBase, self).__init__(symbol, position, is_white)
 
     def check(self, x, y, gm):
@@ -27,27 +28,27 @@ class QueenBase(PieceBase):
             if self.position[0] == x:
                 ma = max(self.position[1], y)
                 mi = min(self.position[1], y)
-                for y_new in range(mi + 1, ma):
+                for y_new in range(mi + 1, ma + 1):
                     if saw_chess_before:
                         return False
                     if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (
-                            WHITE_PIECES if not self.is_white else BLACK_PIECES):
+                            WHITE_PIECES if self.is_white else BLACK_PIECES):
                         return False
                     if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (
-                            BLACK_PIECES if not self.is_white else WHITE_PIECES):
+                            BLACK_PIECES if self.is_white else WHITE_PIECES):
                         saw_chess_before = True
                 return True
             else:
                 ma = max(self.position[0], x)
                 mi = min(self.position[0], x)
-                for x_new in range(mi + 1, ma):
+                for x_new in range(mi + 1, ma + 1):
                     if saw_chess_before:
                         return False
                     if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (
-                            WHITE_PIECES if not self.is_white else BLACK_PIECES):
+                            WHITE_PIECES if self.is_white else BLACK_PIECES):
                         return False
                     if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (
-                            BLACK_PIECES if not self.is_white else WHITE_PIECES):
+                            BLACK_PIECES if self.is_white else WHITE_PIECES):
                         saw_chess_before = True
                 return True
         else:
@@ -60,12 +61,29 @@ class QueenBase(PieceBase):
                 if saw_chess_before:
                     return False
                 cell = gm[self.position[1] + step_y * i][self.position[0] + step_x * i]
-                if cell != " " and cell.symbol in WHITE_PIECES:
+                if cell != " " and cell.symbol in (
+                            WHITE_PIECES if self.is_white else BLACK_PIECES):
                     return False
-                if cell != " " and cell.symbol in BLACK_PIECES:
+                if cell != " " and cell.symbol in (
+                            BLACK_PIECES if self.is_white else WHITE_PIECES):
                     saw_chess_before = True
 
             return True
+
+    def compute_legal_moves(self, gm):
+        legal_moves = [
+            *self.compute_linear_moves(1, 0, gm),
+            *self.compute_linear_moves(-1, 0, gm),
+            *self.compute_linear_moves(0, 1, gm),
+            *self.compute_linear_moves(0, -1, gm),
+            *self.compute_linear_moves(1, 1, gm),
+            *self.compute_linear_moves(1, -1, gm),
+            *self.compute_linear_moves(-1, -1, gm),
+            *self.compute_linear_moves(-1, 1, gm)
+
+        ]
+
+        return legal_moves
 
 
 class BlackQueen(QueenBase):

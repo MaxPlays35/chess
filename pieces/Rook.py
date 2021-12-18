@@ -4,6 +4,7 @@ from .piece_base import PieceBase
 
 class RookBase(PieceBase):
     def __init__(self, symbol: str, position: list[int, int], is_white):
+        self.score = 5
         super(RookBase, self).__init__(symbol, position, is_white)
 
     def check(self, x, y, gm):
@@ -22,7 +23,7 @@ class RookBase(PieceBase):
         if self.position[0] == x:
             ma = max(self.position[1], y)
             mi = min(self.position[1], y)
-            for y_new in range(mi + 1, ma):
+            for y_new in range(mi + 1, ma + 2):
                 if saw_chess_before:
                     return False
                 if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (BLACK_PIECES if not self.is_white else WHITE_PIECES):
@@ -31,20 +32,28 @@ class RookBase(PieceBase):
                     saw_chess_before = True
             return True
         else:
-            ma = max(self.position[0], x)
-            mi = min(self.position[0], x)
-            for x_new in range(mi + 1, ma):
-                if saw_chess_before:
-                    return False
-                if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (BLACK_PIECES if not self.is_white else WHITE_PIECES):
-                    return False
-                if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (WHITE_PIECES if not self.is_white else BLACK_PIECES):
-                    saw_chess_before = True
-            return True
+            if x > self.position[0]:
+                for x_new in range(self.position[0] + 1, x + 1):
+                    if saw_chess_before:
+                        return False
+                    if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (BLACK_PIECES if not self.is_white else WHITE_PIECES):
+                        return False
+                    if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (WHITE_PIECES if not self.is_white else BLACK_PIECES):
+                        saw_chess_before = True
+                return True
+            else:
+                for x_new in range(self.position[0] - 1, x - 1, -1):
+                    if saw_chess_before:
+                        return False
+                    if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (BLACK_PIECES if not self.is_white else WHITE_PIECES):
+                        return False
+                    if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (WHITE_PIECES if not self.is_white else BLACK_PIECES):
+                        saw_chess_before = True
+                return True
 
     def compute_legal_moves(self, gm):
-        legal_moves = [self.compute_linear_moves(1, 0, gm), self.compute_linear_moves(-1, 0, gm),
-                       self.compute_linear_moves(0, 1, gm), self.compute_linear_moves(0, -1, gm)]
+        legal_moves = [*self.compute_linear_moves(1, 0, gm), *self.compute_linear_moves(-1, 0, gm),
+                       *self.compute_linear_moves(0, 1, gm), *self.compute_linear_moves(0, -1, gm)]
         return legal_moves
 
 

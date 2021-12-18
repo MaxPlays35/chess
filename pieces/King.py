@@ -1,9 +1,12 @@
+import copy
+
 from .consts import WHITE_PIECES, BLACK_PIECES
 from .piece_base import PieceBase
 
 
 class KingBase(PieceBase):
     def __init__(self, symbol, position: list[int, int], is_white):
+        self.score = 99
         super(KingBase, self).__init__(symbol, position, is_white)
 
     def check(self, x, y, gm):
@@ -13,6 +16,17 @@ class KingBase(PieceBase):
             return True
 
         return False
+
+    def compute_legal_moves(self, gm):
+        legal_moves = []
+        self.computing_position = copy.copy(self.position)
+
+        for horizontal in range(-1, 2):
+            for vertical in range(-1, 2):
+                square = self.get_square(horizontal, vertical, gm)
+                self.check_square(legal_moves, square, horizontal, vertical)
+
+        return legal_moves
 
 
 class BlackKing(KingBase):

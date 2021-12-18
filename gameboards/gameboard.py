@@ -1,36 +1,15 @@
+import pprint
 from collections import deque
 
+from gameboards.board import Board
 from pieces import *
 
 
 class GameBoard:
     def __init__(self):
-        self.black_army = [Rook.BlackRook([0, 0]), Knight.BlackKnight([1, 0]), Bishop.BlackBishop([2, 0]),
-                           Queen.BlackQueen([3, 0]),
-                           King.BlackKing([4, 0]),
-                           Bishop.BlackBishop([5, 0]), Knight.BlackKnight([6, 0]), Rook.BlackRook([7, 0]),
-                           Pawn.BlackPawn([0, 1]), Pawn.BlackPawn([1, 1]), Pawn.BlackPawn([2, 1]),
-                           Pawn.BlackPawn([3, 1]),
-                           Pawn.BlackPawn([4, 1]), Pawn.BlackPawn([5, 1]),
-                           Pawn.BlackPawn([6, 1]), Pawn.BlackPawn([7, 1])]
-        self.white_army = [Pawn.WhitePawn([0, 6], ), Pawn.WhitePawn([1, 6]), Pawn.WhitePawn([2, 6]),
-                           Pawn.WhitePawn([3, 6]),
-                           Pawn.WhitePawn([4, 6]), Pawn.WhitePawn([5, 6]),
-                           Pawn.WhitePawn([6, 6]), Pawn.WhitePawn([7, 6]), Rook.WhiteRook([0, 7]),
-                           Knight.WhiteKnight([1, 7]), Bishop.WhiteBishop([2, 7]), Queen.WhiteQueen([3, 7]),
-                           King.WhiteKing([4, 7]),
-                           Bishop.WhiteBishop([5, 7]), Knight.WhiteKnight([6, 7]), Rook.WhiteRook([7, 7])]
-        self.board = []
-        self.board.append([*self.black_army[:8]])
-        self.board.append(
-            [*self.black_army[8:]])
-        self.board.extend([[' ' for i in range(8)] for j in range(4)])
-        self.board.append(
-            [*self.white_army[:8]])
-        self.board.append(
-            [*self.white_army[8:]])
-        self.is_white_turn = True
+        self.board = Board()
         self.history = deque()
+        self.reset_time = True
 
     def __repr__(self):
         unpacked = [item for sublist in self.board for item in sublist]
@@ -58,27 +37,41 @@ class GameBoard:
         chess_x, chess_y = ord(chess_xy[0]) - 65, 8 - int(chess_xy[1])
         move_x, move_y = ord(move_xy[0]) - 65, 8 - int(move_xy[1])
         figure = self.board[chess_y][chess_x]
-        if figure != " " and figure.check(move_x, move_y, self.board) and figure.is_white == self.is_white_turn:
+        print(figure)
+
+        if figure != " " and figure.check(move_x, move_y, self.board) and figure.is_white == self.board.is_white_turn:
 
             figure.move(move_x, move_y)
+            if isinstance(figure, Pawn.BlackPawn):
+                print(figure)
+                print(figure.compute_legal_moves(self.board))
 
             self.history.appendleft(f"- {chess_xy} ⇨ {move_xy} ({int(time)} s)")
 
             if self.board[move_y][move_x] != " ":
-                if self.is_white_turn:
-                    self.black_army.remove(self.board[move_y][move_x])
+                if self.board.is_white_turn:
+                    self.board.black_army.remove(self.board[move_y][move_x])
                 else:
-                    self.white_army.remove(self.board[move_y][move_x])
+                    self.board.white_army.remove(self.board[move_y][move_x])
                 self.board[move_y][move_x] = figure
                 self.board[chess_y][chess_x] = " "
-                self.is_white_turn = not self.is_white_turn
+                self.board.is_white_turn = not self.board.is_white_turn
                 return True
             self.board[chess_y][chess_x], self.board[move_y][move_x] = self.board[move_y][move_x], self.board[chess_y][
                 chess_x]
-            self.is_white_turn = not self.is_white_turn
-            if isinstance(figure, Rook.WhiteRook):
-                print(figure.compute_legal_moves(self.board))
+            self.board.is_white_turn = not self.board.is_white_turn
             return True
+
+        return False
+
+    def anybody_wins(self):
+        white_king = list(filter(lambda piece: isinstance(piece, King.WhiteKing), self.board.white_army))
+        black_king = list(filter(lambda piece: isinstance(piece, King.BlackKing), self.board.black_army))
+
+        if not len(black_king):
+            return "White"
+        if not len(white_king):
+            return "Black"
 
         return False
 

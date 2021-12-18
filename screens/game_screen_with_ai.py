@@ -6,13 +6,13 @@ from asciimatics.event import KeyboardEvent
 from asciimatics.exceptions import NextScene
 from asciimatics.widgets import Frame, Layout, Label, Text, PopUpDialog
 
-from gameboards import GameBoard
+from gameboards import GameBoardWithAI
 
 
-class GameScreen(Frame):
+class GameScreenWithAI(Frame):
     def __init__(self, screen):
-        super(GameScreen, self).__init__(screen, screen.height - 20, screen.width - 20)
-        self.game = GameBoard()
+        super(GameScreenWithAI, self).__init__(screen, screen.height - 20, screen.width - 20)
+        self.game = GameBoardWithAI()
 
         self.layout = Layout([1, 1])
 
@@ -69,7 +69,7 @@ class GameScreen(Frame):
         self.move_text.value = ""
 
     def reset_scene(self, _):
-        self.game = GameBoard()
+        self.game = GameBoardWithAI()
         raise NextScene("MainScreen")
 
     def process_event(self, event):
@@ -77,7 +77,7 @@ class GameScreen(Frame):
             self.__make_move()
             event = None
 
-        return super(GameScreen, self).process_event(event)
+        return super(GameScreenWithAI, self).process_event(event)
 
     def update(self, frame_no):
         if self.game.reset_time:
@@ -88,4 +88,4 @@ class GameScreen(Frame):
         self.time_label.text = f'Turn duration: {int(time.time() - self.time)} s'
         self.turn_text.text = f'{"Black" if not self.game.board.is_white_turn else "White"} turn'
         self.history.text = '\n'.join(islice(self.game.history, 8))
-        super(GameScreen, self).update(frame_no)
+        super(GameScreenWithAI, self).update(frame_no)

@@ -17,8 +17,8 @@ class PieceBase:
         self.moves += 1
 
     def compute_linear_moves(self, horizontal: int, vertical: int, gm):
-        self.computing_position = copy.copy(self.position)
-        legalMoves = []
+        self.computing_position = copy.deepcopy(self.position)
+        legal_moves = []
 
         target_square = self.get_square(horizontal, vertical, gm)
 
@@ -27,21 +27,28 @@ class PieceBase:
             self.computing_position[0] += horizontal
 
             if target_square == " ":
-                legalMoves.append([self.computing_position[0], self.computing_position[1]])
+                legal_moves.append([self.position, [self.computing_position[0], self.computing_position[1]]])
             elif target_square.is_white == self.is_white:
                 break
             else:
-                legalMoves.append([self.computing_position[0], self.computing_position[1]])
+                legal_moves.append([self.position, [self.computing_position[0], self.computing_position[1]]])
                 break
             target_square = self.get_square(horizontal, vertical, gm)
 
-        return legalMoves
+        return legal_moves
 
     def get_square(self, horizontal: int, vertical: int, gm):
         if 8 > horizontal + self.computing_position[0] >= 0 and 8 > vertical + self.computing_position[1] >= 0:
             return gm[vertical + self.computing_position[1]][horizontal + self.computing_position[0]]
         else:
             return None
+
+    def check_square(self, legal_moves: list, square, horizontal, vertical):
+        if square is not None:
+            if square == " ":
+                legal_moves.append([self.position, [self.computing_position[0] + horizontal, self.computing_position[1] + vertical]])
+            elif square.is_white != self.is_white:
+                legal_moves.append([self.position, [self.computing_position[0] + horizontal, self.computing_position[1] + vertical]])
 
     def __repr__(self):
         return self.symbol + str(self.position)

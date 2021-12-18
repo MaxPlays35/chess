@@ -1,4 +1,5 @@
 from asciimatics.widgets import Frame, Layout, Label, Button
+from asciimatics.exceptions import NextScene
 
 
 class MainScreen(Frame):
@@ -19,10 +20,10 @@ class MainScreen(Frame):
         self.fix()
 
     def _play_locally(self):
-        pass
+        raise NextScene("GameScreenLocally")
 
     def _play_ai(self):
-        pass
+        raise NextScene("GameScreenWithAI")
 
     def _play_network(self):
         pass

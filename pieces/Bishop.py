@@ -4,6 +4,7 @@ from .piece_base import PieceBase
 
 class BishopBase(PieceBase):
     def __init__(self, symbol, position: list[int, int], is_white):
+        self.score = 3
         super(BishopBase, self).__init__(symbol, position, is_white)
 
     def check(self, x, y, gm):
@@ -35,6 +36,16 @@ class BishopBase(PieceBase):
             if cell != " " and cell.symbol in (WHITE_PIECES if not self.is_white else BLACK_PIECES):
                 saw_chess_before = True
         return True
+
+    def compute_legal_moves(self, gm):
+        legal_moves = [
+            *self.compute_linear_moves(1, 1, gm),
+            *self.compute_linear_moves(1, -1, gm),
+            *self.compute_linear_moves(-1, -1, gm),
+            *self.compute_linear_moves(-1, 1, gm)
+        ]
+
+        return legal_moves
 
 
 class BlackBishop(BishopBase):
