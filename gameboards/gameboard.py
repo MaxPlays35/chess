@@ -37,14 +37,10 @@ class GameBoard:
         chess_x, chess_y = ord(chess_xy[0]) - 65, 8 - int(chess_xy[1])
         move_x, move_y = ord(move_xy[0]) - 65, 8 - int(move_xy[1])
         figure = self.board[chess_y][chess_x]
-        print(figure)
 
         if figure != " " and figure.check(move_x, move_y, self.board) and figure.is_white == self.board.is_white_turn:
 
             figure.move(move_x, move_y)
-            if isinstance(figure, Pawn.BlackPawn):
-                print(figure)
-                print(figure.compute_legal_moves(self.board))
 
             self.history.appendleft(f"- {chess_xy} ⇨ {move_xy} ({int(time)} s)")
 

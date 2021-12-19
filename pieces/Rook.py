@@ -21,16 +21,24 @@ class RookBase(PieceBase):
     def check_stage_2(self, x, y, gm):
         saw_chess_before = False
         if self.position[0] == x:
-            ma = max(self.position[1], y)
-            mi = min(self.position[1], y)
-            for y_new in range(mi + 1, ma + 2):
-                if saw_chess_before:
-                    return False
-                if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (BLACK_PIECES if not self.is_white else WHITE_PIECES):
-                    return False
-                if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (WHITE_PIECES if not self.is_white else BLACK_PIECES):
-                    saw_chess_before = True
-            return True
+            if y > self.position[1]:
+                for y_new in range(self.position[1] + 1, y + 1):
+                    if saw_chess_before:
+                        return False
+                    if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (BLACK_PIECES if not self.is_white else WHITE_PIECES):
+                        return False
+                    if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (WHITE_PIECES if not self.is_white else BLACK_PIECES):
+                        saw_chess_before = True
+                return True
+            else:
+                for y_new in range(self.position[1] - 1, y - 1, -1):
+                    if saw_chess_before:
+                        return False
+                    if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (BLACK_PIECES if not self.is_white else WHITE_PIECES):
+                        return False
+                    if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (WHITE_PIECES if not self.is_white else BLACK_PIECES):
+                        saw_chess_before = True
+                return True
         else:
             if x > self.position[0]:
                 for x_new in range(self.position[0] + 1, x + 1):

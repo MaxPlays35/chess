@@ -26,31 +26,51 @@ class QueenBase(PieceBase):
         saw_chess_before = False
         if figure == "Rook":
             if self.position[0] == x:
-                ma = max(self.position[1], y)
-                mi = min(self.position[1], y)
-                for y_new in range(mi + 1, ma + 1):
-                    if saw_chess_before:
-                        return False
-                    if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (
-                            WHITE_PIECES if self.is_white else BLACK_PIECES):
-                        return False
-                    if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (
-                            BLACK_PIECES if self.is_white else WHITE_PIECES):
-                        saw_chess_before = True
-                return True
+                if y > self.position[1]:
+                    for y_new in range(self.position[1] + 1, y + 1):
+                        if saw_chess_before:
+                            return False
+                        if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (
+                                BLACK_PIECES if not self.is_white else WHITE_PIECES):
+                            return False
+                        if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (
+                                WHITE_PIECES if not self.is_white else BLACK_PIECES):
+                            saw_chess_before = True
+                    return True
+                else:
+                    for y_new in range(self.position[1] - 1, y - 1, -1):
+                        if saw_chess_before:
+                            return False
+                        if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (
+                                BLACK_PIECES if not self.is_white else WHITE_PIECES):
+                            return False
+                        if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (
+                                WHITE_PIECES if not self.is_white else BLACK_PIECES):
+                            saw_chess_before = True
+                    return True
             else:
-                ma = max(self.position[0], x)
-                mi = min(self.position[0], x)
-                for x_new in range(mi + 1, ma + 1):
-                    if saw_chess_before:
-                        return False
-                    if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (
-                            WHITE_PIECES if self.is_white else BLACK_PIECES):
-                        return False
-                    if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (
-                            BLACK_PIECES if self.is_white else WHITE_PIECES):
-                        saw_chess_before = True
-                return True
+                if x > self.position[0]:
+                    for x_new in range(self.position[0] + 1, x + 1):
+                        if saw_chess_before:
+                            return False
+                        if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (
+                                BLACK_PIECES if not self.is_white else WHITE_PIECES):
+                            return False
+                        if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (
+                                WHITE_PIECES if not self.is_white else BLACK_PIECES):
+                            saw_chess_before = True
+                    return True
+                else:
+                    for x_new in range(self.position[0] - 1, x - 1, -1):
+                        if saw_chess_before:
+                            return False
+                        if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (
+                                BLACK_PIECES if not self.is_white else WHITE_PIECES):
+                            return False
+                        if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (
+                                WHITE_PIECES if not self.is_white else BLACK_PIECES):
+                            saw_chess_before = True
+                    return True
         else:
             steps = abs(self.position[0] - x)
 
@@ -62,10 +82,10 @@ class QueenBase(PieceBase):
                     return False
                 cell = gm[self.position[1] + step_y * i][self.position[0] + step_x * i]
                 if cell != " " and cell.symbol in (
-                            WHITE_PIECES if self.is_white else BLACK_PIECES):
+                        WHITE_PIECES if self.is_white else BLACK_PIECES):
                     return False
                 if cell != " " and cell.symbol in (
-                            BLACK_PIECES if self.is_white else WHITE_PIECES):
+                        BLACK_PIECES if self.is_white else WHITE_PIECES):
                     saw_chess_before = True
 
             return True

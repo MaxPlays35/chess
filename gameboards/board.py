@@ -33,14 +33,14 @@ class Board:
         return self.board[item]
 
     def compute_rating(self, side):
-        counter = 0
-        if side == "BLACK":
-            for piece in self.black_army:
-                counter += piece.score
-        else:
-            for piece in self.white_army:
-                counter += piece.score
-        return counter
+        white_score = 0
+        black_score = 0
+
+        for piece in self.black_army:
+            black_score += piece.score
+        for piece in self.white_army:
+            white_score += piece.score
+        return black_score - white_score if side == "BLACK" else white_score - black_score
 
     def compute_all_legal_moves(self):
         legal_moves = []
