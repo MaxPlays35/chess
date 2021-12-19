@@ -1,12 +1,11 @@
 import copy
+import time
 from collections import deque
 from math import floor
 from typing import Union
 
-
 from .board import Board
 from .gameboard import GameBoard
-import time
 
 
 class GameBoardWithAI(GameBoard):
@@ -26,7 +25,6 @@ class GameBoardWithAI(GameBoard):
             start_time = time.time()
             move_res = self.correct_ai(self.ai_move())
             end_time = time.time()
-            print(floor(end_time - start_time))
 
             res = super(GameBoardWithAI, self).move(*move_res, floor(end_time - start_time))
 
@@ -37,8 +35,6 @@ class GameBoardWithAI(GameBoard):
     def make_move(self, x1, y1, x2, y2):
         self.backup.append(copy.deepcopy(self.shadow_board))
         figure = self.shadow_board[y1][x1]
-
-        # print(figure)
 
         if figure != " " and figure.check(x2, y2,
                                           self.shadow_board) and figure.is_white == self.shadow_board.is_white_turn:

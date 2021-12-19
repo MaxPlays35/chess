@@ -57,8 +57,8 @@ class Board:
         self.board = board
 
     def __repr__(self):
-            unpacked = [item for sublist in self.board for item in sublist]
-            return """
+        unpacked = [item for sublist in self.board for item in sublist]
+        return """
       ┌───┬───┬───┬───┬───┬───┬───┬───┐
     8 │ %s │ %s │ %s │ %s │ %s │ %s │ %s │ %s │
       ├───┼───┼───┼───┼───┼───┼───┼───┤

@@ -1,18 +1,22 @@
 import re
 import time
 from itertools import islice
+from typing import Union
 
 from asciimatics.event import KeyboardEvent
 from asciimatics.exceptions import NextScene
 from asciimatics.widgets import Frame, Layout, Label, Text, PopUpDialog
 
-from gameboards import GameBoard
+from gameboards import GameBoard, GameBoardWithAI
 
 
 class GameScreen(Frame):
-    def __init__(self, screen):
+    def __init__(self, screen, game: Union[GameBoard, GameBoardWithAI, None] = None):
         super(GameScreen, self).__init__(screen, screen.height - 20, screen.width - 20)
-        self.game = GameBoard()
+        if game:
+            self.game = game
+        else:
+            self.game = GameBoard()
 
         self.layout = Layout([1, 1])
 

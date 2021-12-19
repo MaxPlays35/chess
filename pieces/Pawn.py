@@ -2,7 +2,6 @@ import copy
 
 from .Queen import QueenBase
 from .consts import BLACK_PIECES, WHITE_PIECES
-from .piece_base import PieceBase
 
 
 class BlackPawn(QueenBase):
@@ -64,20 +63,20 @@ class BlackPawn(QueenBase):
             if target_square is not None and target_square == " ":
                 legal_moves.append([self.position, [self.computing_position[0], self.computing_position[1] + 1]])
                 target_square = self.get_square(0, 2, gm)
-    
+
                 if not self.moves and target_square == " ":
                     legal_moves.append([self.position, [self.computing_position[0], self.computing_position[1] + 2]])
-    
+
             target_square = self.get_square(-1, 1, gm)
-    
+
             if target_square is not None and target_square != " " and target_square.symbol in WHITE_PIECES:
                 legal_moves.append([self.position, [self.computing_position[0] - 1, self.computing_position[1] + 1]])
-    
+
             target_square = self.get_square(1, 1, gm)
-    
+
             if target_square is not None and target_square != " " and target_square.symbol in WHITE_PIECES:
                 legal_moves.append([self.position, [self.computing_position[0] + 1, self.computing_position[1] + 1]])
-    
+
             return legal_moves
         return super(BlackPawn, self).compute_legal_moves(gm)
 
@@ -110,10 +109,10 @@ class WhitePawn(QueenBase):
 
             if gm[y][x] != " " and gm[y][x].symbol in WHITE_PIECES:
                 return False
-    
+
             if x == self.position[0]:
                 return True
-    
+
         return False
 
     def check_stage_2(self, x, y, gm):
@@ -122,7 +121,6 @@ class WhitePawn(QueenBase):
                 if gm[y_new][x] != ' ':
                     return False
         return True
-
 
     def compute_legal_moves(self, gm):
         if not self.Queen:

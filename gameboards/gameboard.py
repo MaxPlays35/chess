@@ -1,4 +1,3 @@
-import pprint
 from collections import deque
 
 from gameboards.board import Board
@@ -34,8 +33,8 @@ class GameBoard:
  A   B   C   D   E   F   G   H""" % tuple(unpacked)
 
     def move(self, chess_xy: str, move_xy: str, time: float):
-        chess_x, chess_y = ord(chess_xy[0]) - 65, 8 - int(chess_xy[1])
-        move_x, move_y = ord(move_xy[0]) - 65, 8 - int(move_xy[1])
+        chess_x, chess_y = self.convert_str(chess_xy)
+        move_x, move_y = self.convert_str(move_xy)
         figure = self.board[chess_y][chess_x]
 
         if figure != " " and figure.check(move_x, move_y, self.board) and figure.is_white == self.board.is_white_turn:
@@ -59,6 +58,18 @@ class GameBoard:
             return True
 
         return False
+
+    def check_move(self, chess_xy, move_xy):
+        chess_x, chess_y = self.convert_str(chess_xy)
+        move_x, move_y = self.convert_str(move_xy)
+
+        figure = self.board[chess_y][chess_x]
+
+        return figure != " " and figure.check(move_x, move_y,
+                                              self.board) and figure.is_white == self.board.is_white_turn
+
+    def convert_str(self, to_convert):
+        return ord(to_convert[0]) - 65, 8 - int(to_convert[1])
 
     def anybody_wins(self):
         white_king = list(filter(lambda piece: isinstance(piece, King.WhiteKing), self.board.white_army))

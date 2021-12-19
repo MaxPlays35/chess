@@ -25,18 +25,22 @@ class RookBase(PieceBase):
                 for y_new in range(self.position[1] + 1, y + 1):
                     if saw_chess_before:
                         return False
-                    if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (BLACK_PIECES if not self.is_white else WHITE_PIECES):
+                    if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (
+                    BLACK_PIECES if not self.is_white else WHITE_PIECES):
                         return False
-                    if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (WHITE_PIECES if not self.is_white else BLACK_PIECES):
+                    if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (
+                    WHITE_PIECES if not self.is_white else BLACK_PIECES):
                         saw_chess_before = True
                 return True
             else:
                 for y_new in range(self.position[1] - 1, y - 1, -1):
                     if saw_chess_before:
                         return False
-                    if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (BLACK_PIECES if not self.is_white else WHITE_PIECES):
+                    if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (
+                    BLACK_PIECES if not self.is_white else WHITE_PIECES):
                         return False
-                    if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (WHITE_PIECES if not self.is_white else BLACK_PIECES):
+                    if gm[y_new][x] != ' ' and gm[y_new][x].symbol in (
+                    WHITE_PIECES if not self.is_white else BLACK_PIECES):
                         saw_chess_before = True
                 return True
         else:
@@ -44,18 +48,22 @@ class RookBase(PieceBase):
                 for x_new in range(self.position[0] + 1, x + 1):
                     if saw_chess_before:
                         return False
-                    if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (BLACK_PIECES if not self.is_white else WHITE_PIECES):
+                    if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (
+                    BLACK_PIECES if not self.is_white else WHITE_PIECES):
                         return False
-                    if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (WHITE_PIECES if not self.is_white else BLACK_PIECES):
+                    if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (
+                    WHITE_PIECES if not self.is_white else BLACK_PIECES):
                         saw_chess_before = True
                 return True
             else:
                 for x_new in range(self.position[0] - 1, x - 1, -1):
                     if saw_chess_before:
                         return False
-                    if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (BLACK_PIECES if not self.is_white else WHITE_PIECES):
+                    if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (
+                    BLACK_PIECES if not self.is_white else WHITE_PIECES):
                         return False
-                    if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (WHITE_PIECES if not self.is_white else BLACK_PIECES):
+                    if gm[y][x_new] != ' ' and gm[y][x_new].symbol in (
+                    WHITE_PIECES if not self.is_white else BLACK_PIECES):
                         saw_chess_before = True
                 return True
 

@@ -46,9 +46,11 @@ class PieceBase:
     def check_square(self, legal_moves: list, square, horizontal, vertical):
         if square is not None:
             if square == " ":
-                legal_moves.append([self.position, [self.computing_position[0] + horizontal, self.computing_position[1] + vertical]])
+                legal_moves.append(
+                    [self.position, [self.computing_position[0] + horizontal, self.computing_position[1] + vertical]])
             elif square.is_white != self.is_white:
-                legal_moves.append([self.position, [self.computing_position[0] + horizontal, self.computing_position[1] + vertical]])
+                legal_moves.append(
+                    [self.position, [self.computing_position[0] + horizontal, self.computing_position[1] + vertical]])
 
     def __repr__(self):
         return self.symbol + str(self.position)
